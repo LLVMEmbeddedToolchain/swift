@@ -30,3 +30,21 @@ extension CxxSpan {
     self.init(unsafeBufferPointer.baseAddress!, Size(unsafeBufferPointer.count))
   }
 }
+
+public protocol CxxMutableSpan<Element> {
+  associatedtype Element
+  associatedtype Size: BinaryInteger
+
+  init()
+  init(_ unsafeMutablePointer : UnsafeMutablePointer<Element>, _ count: Size)
+}
+
+extension CxxMutableSpan {
+  /// Creates a C++ span from a Swift UnsafeMutableBufferPointer
+  @inlinable
+  public init(_ unsafeMutableBufferPointer: UnsafeMutableBufferPointer<Element>) {
+    precondition(unsafeMutableBufferPointer.baseAddress != nil, 
+                  "UnsafeMutableBufferPointer should not point to nil")
+    self.init(unsafeMutableBufferPointer.baseAddress!, Size(unsafeMutableBufferPointer.count))
+  }
+}

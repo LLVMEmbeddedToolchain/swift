@@ -5,35 +5,42 @@
 #include <string>
 #include <span>
 
-using Span = std::span<const int>;
-using NonConstSpan = std::span<int>;
-using SpanOfString = std::span<const std::string>;
+using ConstSpan = std::span<const int>;
+using Span = std::span<int>;
+using ConstSpanOfString = std::span<const std::string>;
+using SpanOfString = std::span<std::string>;
 
 // TODO remove this code
 class CppApi {
 public:
-  Span getConstSpan();
-  std::span<int> getSpan();
-  // TODO try with std::span<int>
+  ConstSpan getConstSpan();
+  Span getSpan();
 };
 
-Span CppApi::getConstSpan() {
+ConstSpan CppApi::getConstSpan() {
+  ConstSpan sp{new int[2], 2};
+  return sp;
+}
+
+Span CppApi::getSpan() {
   Span sp{new int[2], 2};
   return sp;
 }
 
-std::span<int> CppApi::getSpan() {
-  std::span<int> sp{new int[2], 2};
-  return sp;
-}
-
+static int icarray[]{1, 2, 3};
 static int iarray[]{1, 2, 3};
 static std::string sarray[]{"", "ab", "abc"};
+static ConstSpan icspan = {icarray};
 static Span ispan = {iarray};
 static SpanOfString sspan = {sarray};
 
-inline Span initSpan() { 
+inline ConstSpan initConstSpan() {
   const int a[]{1, 2, 3};
+  return ConstSpan(a);
+}
+
+inline Span initSpan() {
+  int a[]{1, 2, 3};
   return Span(a);
 }
 
